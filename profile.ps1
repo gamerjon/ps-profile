@@ -21,6 +21,7 @@ $psVerMaj= $host.Version.Major
 $psVerMin= $host.Version.Minor
 $curUser= (Get-ChildItem Env:\USERNAME).Value
 $curComp= (Get-ChildItem Env:\COMPUTERNAME).Value
+$isElevated = ""
 
 Write-Host "Greetings, " -NoNewline -foregroundColor $foregroundColor
 Write-Host "$curUser" -NoNewline -foregroundColor DarkYellow
@@ -28,7 +29,7 @@ Write-Host "!" -foregroundColor $foregroundColor
 Write-Host "It is: $($time.ToLongDateString())"
 Write-Host "You're running PowerShell version: $psVerMaj.$psVerMin" -foregroundColor Green
 Write-Host "Your computer name is: $curComp" -foregroundColor Green
-Write-Host "Happy scripting!" `n
+Write-Host "Happy scripting!"
 
 function Prompt {
     $realLASTEXITCODE = $LASTEXITCODE
@@ -40,6 +41,7 @@ function Prompt {
 
     if (Test-Administrator) {  # Use different username if elevated
         Write-Host "(Elevated) " -NoNewline -ForegroundColor White
+	$isElevated = "(Elevated)"
     }
 
     Write-Host "$curUser@" -NoNewline -ForegroundColor DarkYellow
@@ -63,7 +65,7 @@ function Prompt {
 
     Write-Host ""
 
-    $host.UI.RawUI.WindowTitle = "PS >> User: $curUser >> Current DIR: $((Get-Location).Path)"
+    $host.UI.RawUI.WindowTitle = "$isElevated PS >> User: $curUser >> Current DIR: $((Get-Location).Path)"
 
     return "> "
 
